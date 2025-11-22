@@ -1,0 +1,4 @@
+name: BedrockOffhand
+version: '1.0.0'
+main: com.noty215.Hand.BedrockOffhandPlugin
+api-version: '1.21'
