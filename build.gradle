@@ -3,7 +3,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = 'com.noty215.Hand'
+group = 'com.noty215.hand'
 version = '1.0.0'
 
 repositories {
