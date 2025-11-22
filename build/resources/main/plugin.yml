@@ -1,5 +1,5 @@
 name: BedrockOffhand
-version: ${version}
+version: 1.0.0
 main: com.noty215.hand.BedrockOffhandPlugin
 api-version: '1.21'
 description: Offhand support for Bedrock players on Java servers

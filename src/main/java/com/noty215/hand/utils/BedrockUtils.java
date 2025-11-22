@@ -4,10 +4,6 @@ import org.bukkit.entity.Player;
 
 public class BedrockUtils {
 
-    /**
-     * Detect if a player is from Bedrock edition
-     * Note: This method uses various detection techniques
-     */
     public static boolean isBedrockPlayer(Player player) {
         // Method 1: Check for Floodgate (if installed)
         if (isFloodgatePlayer(player)) {
@@ -19,7 +15,7 @@ public class BedrockUtils {
             return true;
         }
 
-        // Method 3: Check for specific metadata or permissions
+        // Method 3: Check for specific metadata
         if (player.hasMetadata("isBedrockPlayer")) {
             return true;
         }
@@ -55,6 +51,6 @@ public class BedrockUtils {
     }
 
     public static String colorize(String message) {
-        return message.replace('&', '§');
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', message);
     }
 }
