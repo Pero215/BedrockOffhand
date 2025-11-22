@@ -1,55 +1,62 @@
 plugins {
     id 'java'
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id 'io.papermc.paperweight.userdev' version '1.7.1'
 }
 
-group = 'com.noty215.hand'
+group = 'com.noty215.Hand'
 version = '1.0.0'
+description = 'Offhand support for Bedrock players on Java servers'
+
+sourceCompatibility = 21
+targetCompatibility = 21
 
 repositories {
     mavenCentral()
     maven {
-        name = "papermc-repo"
-        url = "https://repo.papermc.io/repository/maven-public/"
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        url = 'https://repo.geysermc.org/releases/' // Geyser
+    }
+    maven {
+        url = 'https://repo.opencollab.dev/main/' // Floodgate
     }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-}
+    paperweight.paperDevBundle('1.21.8-R0.1-SNAPSHOT')
 
-tasks {
-    runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21")
-    }
-}
+    // Geyser API (optional - for better Bedrock player detection)
+    compileOnly files'libs/geyser-api.jar'
 
-def targetJavaVersion = 21
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release.set(targetJavaVersion)
-    }
+    // Floodgate API (optional - for Floodgate integration)
+    compileOnly 'org.geysermc.floodgate:api:2.2.0-SNAPSHOT'
 }
 
 processResources {
     def props = [version: version]
     inputs.properties props
     filteringCharset 'UTF-8'
-    filesMatching('paper-plugin.yml') {
+    filesMatching('plugin.yml') {
         expand props
     }
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+jar {
+    archiveBaseName = 'BedrockOffhand'
+    archiveVersion = version
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Optional: Task to copy the built jar to a local test server
+task copyToServer(type: Copy) {
+    from jar
+    into '/path/to/your/server/plugins' // Change this to your actual server plugins directory
+}
+
+// build.dependsOn copyToServer // Only uncomment if you set the correct path above

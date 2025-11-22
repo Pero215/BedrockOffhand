@@ -1,4 +1,21 @@
 name: BedrockOffhand
-version: '1.0.0'
+version: 1.0.0
 main: com.noty215.hand.BedrockOffhandPlugin
-api-version: '1.21'
+api-version: 1.21
+description: Offhand support for Bedrock players on Java servers
+author: noty215
+website: https://github.com/noty215
+
+depend: [Geyser, floodgate]
+softdepend: []
+
+commands:
+  offhand:
+    description: Manage your offhand items
+    usage: /<command> [info|clear]
+    permission: bedrockoffhand.use
+
+permissions:
+  bedrockoffhand.use:
+    description: Allows players to use offhand commands
+    default: true
