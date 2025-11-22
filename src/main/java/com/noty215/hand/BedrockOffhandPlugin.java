@@ -1,8 +1,6 @@
 package com.noty215.hand;
 
-import com.noty215.hand.listeners.InventoryListener;
-import com.noty215.hand.listeners.PlayerJoinListener;
-import com.noty215.hand.listeners.PlayerQuitListener;
+import com.noty215.hand.listeners.*;
 import com.noty215.hand.managers.OffhandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,17 +11,10 @@ public final class BedrockOffhandPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        // Save default config
         saveDefaultConfig();
-
-        // Initialize manager
         offhandManager = new OffhandManager();
-
-        // Register events
         registerEvents();
-
-        getLogger().info("BedrockOffhandPlugin has been enabled!");
+        getLogger().info("BedrockOffhandPlugin has been enabled with true offhand support!");
     }
 
     @Override
@@ -37,6 +28,7 @@ public final class BedrockOffhandPlugin extends JavaPlugin {
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
     }
 

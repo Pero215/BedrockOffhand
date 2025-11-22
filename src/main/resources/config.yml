@@ -1,32 +1,33 @@
 # Bedrock Offhand Configuration
+# True simultaneous offhand support for Bedrock players
 
-# Bedrock player settings
-bedrock:
-  # The inventory slot to use for offhand (0-8, where 0 is first hotbar slot)
-  offhand-slot: 8
+offhand:
+  # Weapons that allow direct right-click offhand usage (no crouch needed)
+  no-crouch-weapons:
+    - "SWORD"
+    - "MACE"
 
-  # Prevent Bedrock players from moving items out of offhand slot
-  prevent-offhand-move: true
+  # Cooldown between offhand uses (in ticks)
+  cooldown-ticks: 5
 
-  # Auto-sync offhand when inventory closes
-  auto-sync: true
+  # Prevent main hand action when using offhand
+  cancel-main-hand-action: true
 
-# Message settings
+  # Wind charge settings
+  wind-charge:
+    power: 1.0
+    cooldown: 40
+
+visual-slot:
+  enabled: true
+  slot: 8
+
 messages:
   welcome-enabled: true
-  welcome-message: "&aOffhand system enabled! Use hotbar slot 9 for offhand items."
+  welcome-message: "&aTrue offhand enabled! &eRight-click &awith sword/mace or &eCrouch + Right-click &afor other items."
+  offhand-info: "&eOffhand item: &6{item}"
+  offhand-cleared: "&aOffhand cleared!"
 
-  offhand-info: "&eYour offhand item: &6{item}"
-  offhand-cleared: "&aYour offhand has been cleared!"
-  no-offhand-item: "&cYou don't have an item in your offhand!"
-
-# Compatibility settings
 compatibility:
-  # Use Floodgate API if available
   use-floodgate: true
-
-  # Use Geyser API if available
   use-geyser: true
-
-  # Fallback detection methods
-  use-name-detection: true

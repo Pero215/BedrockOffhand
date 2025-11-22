@@ -1,5 +1,6 @@
 package com.noty215.hand.managers;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -11,64 +12,69 @@ import java.util.UUID;
 public class OffhandManager {
     private final Map<UUID, ItemStack> bedrockOffhandItems;
     private final Map<UUID, Boolean> bedrockPlayers;
+    private final Map<UUID, Long> lastOffhandUse;
 
     public OffhandManager() {
         this.bedrockOffhandItems = new HashMap<>();
         this.bedrockPlayers = new HashMap<>();
+        this.lastOffhandUse = new HashMap<>();
     }
 
     public void addBedrockPlayer(Player player) {
         UUID playerId = player.getUniqueId();
         bedrockPlayers.put(playerId, true);
-
-        // Initialize with empty offhand
-        bedrockOffhandItems.put(playerId, null);
+        bedrockOffhandItems.put(playerId, new ItemStack(Material.AIR));
+        lastOffhandUse.put(playerId, 0L);
     }
 
     public void removeBedrockPlayer(Player player) {
         UUID playerId = player.getUniqueId();
         bedrockPlayers.remove(playerId);
         bedrockOffhandItems.remove(playerId);
+        lastOffhandUse.remove(playerId);
     }
 
     public boolean isBedrockPlayer(Player player) {
         return bedrockPlayers.containsKey(player.getUniqueId());
     }
 
-    public void setOffhandItem(Player player, ItemStack item) {
-        if (!isBedrockPlayer(player)) return;
+    public ItemStack getOffhandItem(Player player) {
+        return bedrockOffhandItems.getOrDefault(player.getUniqueId(), new ItemStack(Material.AIR));
+    }
+
+    public boolean setOffhandItem(Player player, ItemStack item) {
+        if (!isBedrockPlayer(player)) return false;
 
         UUID playerId = player.getUniqueId();
-        bedrockOffhandItems.put(playerId, item);
+        bedrockOffhandItems.put(playerId, item != null ? item.clone() : new ItemStack(Material.AIR));
 
-        // For Bedrock players, we'll simulate offhand in their inventory
-        updatePlayerInventory(player);
-    }
-
-    public ItemStack getOffhandItem(Player player) {
-        return bedrockOffhandItems.get(player.getUniqueId());
-    }
-
-    private void updatePlayerInventory(Player player) {
-        PlayerInventory inventory = player.getInventory();
-        ItemStack offhandItem = getOffhandItem(player);
-
-        // We'll use a specific slot to simulate offhand for Bedrock players
-        int offhandSlot = getConfig().getInt("bedrock.offhand-slot", 8);
-
-        if (offhandSlot >= 0 && offhandSlot < 9) {
-            inventory.setItem(offhandSlot, offhandItem);
+        // Update player's inventory display if using visual slot
+        if (getConfig().getBoolean("visual-slot.enabled", true)) {
+            updateVisualOffhandSlot(player, item);
         }
+
+        return true;
     }
 
-    public void syncOffhandToInventory(Player player) {
-        if (!isBedrockPlayer(player)) return;
+    public boolean canUseOffhand(Player player) {
+        UUID playerId = player.getUniqueId();
+        long lastUse = lastOffhandUse.getOrDefault(playerId, 0L);
+        long cooldown = getConfig().getLong("offhand.cooldown-ticks", 5L);
 
+        return (System.currentTimeMillis() - lastUse) > (cooldown * 50); // Convert ticks to ms
+    }
+
+    public void setLastOffhandUse(Player player) {
+        lastOffhandUse.put(player.getUniqueId(), System.currentTimeMillis());
+    }
+
+    private void updateVisualOffhandSlot(Player player, ItemStack item) {
         PlayerInventory inventory = player.getInventory();
-        int offhandSlot = getConfig().getInt("bedrock.offhand-slot", 8);
+        int visualSlot = getConfig().getInt("visual-slot.slot", 8);
 
-        ItemStack currentItem = inventory.getItem(offhandSlot);
-        setOffhandItem(player, currentItem);
+        if (visualSlot >= 0 && visualSlot < 9) {
+            inventory.setItem(visualSlot, item);
+        }
     }
 
     private org.bukkit.configuration.file.FileConfiguration getConfig() {
@@ -78,5 +84,6 @@ public class OffhandManager {
     public void cleanup() {
         bedrockOffhandItems.clear();
         bedrockPlayers.clear();
+        lastOffhandUse.clear();
     }
 }
