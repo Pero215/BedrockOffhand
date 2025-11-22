@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.noty215.Hand'
-version = '1.0.0'
+version = '1.0.2'
 description = 'Offhand support for Bedrock players on Java servers'
 
 repositories {
