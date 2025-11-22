@@ -6,23 +6,15 @@ import org.bukkit.entity.Player;
 public class MessageUtils {
 
     public static void sendOffhandMessage(Player player, String message) {
-        // Try to use action bar if available (Paper), otherwise use chat
-        try {
-            player.sendActionBar(message);
-        } catch (NoSuchMethodError e) {
-            // Fallback to title or chat message for Spigot
-            player.sendTitle("", ChatColor.translateAlternateColorCodes('&', message), 5, 20, 5);
-        }
+        // For Spigot compatibility, use titles or chat messages
+        String coloredMessage = ChatColor.translateAlternateColorCodes('&', message);
+
+        // Use title for important messages (less spammy than chat)
+        player.sendTitle("", coloredMessage, 5, 20, 5);
     }
 
-    public static void sendActionBar(Player player, String message) {
-        try {
-            // Reflection to check if sendActionBar exists
-            player.getClass().getMethod("sendActionBar", String.class);
-            player.sendActionBar(ChatColor.translateAlternateColorCodes('&', message));
-        } catch (Exception e) {
-            // Fallback for Spigot - use titles
-            player.sendTitle("", ChatColor.translateAlternateColorCodes('&', message), 5, 20, 5);
-        }
+    public static void sendQuickMessage(Player player, String message) {
+        // Use chat messages for quick feedback
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 }

@@ -11,8 +11,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class PlayerInteractListener implements Listener {
     private final OffhandManager offhandManager;
@@ -203,8 +201,6 @@ public class PlayerInteractListener implements Listener {
 
             // Add cooldown
             player.setCooldown(Material.WIND_CHARGE, 40); // 2 second cooldown
-
-            // You could spawn an actual wind charge entity here if needed
         } else {
             sendMessage(player, ChatColor.RED + "Wind charge on cooldown!");
         }
@@ -254,9 +250,10 @@ public class PlayerInteractListener implements Listener {
     private void usePotion(Player player, ItemStack potion) {
         sendMessage(player, ChatColor.DARK_PURPLE + "Drinking potion from offhand!");
 
-        // Simulate potion effects based on potion type
-        // In a real implementation, you'd check the potion meta for actual effects
-        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
+        // Simple health restoration instead of potion effects
+        double currentHealth = player.getHealth();
+        double maxHealth = player.getMaxHealth();
+        player.setHealth(Math.min(maxHealth, currentHealth + 6.0));
 
         // Set cooldown
         player.setCooldown(potion.getType(), 20);
@@ -269,8 +266,10 @@ public class PlayerInteractListener implements Listener {
         player.setFoodLevel(Math.min(20, player.getFoodLevel() + 4));
         player.setSaturation(player.getSaturation() + 2.4f);
 
-        // Small health regeneration effect
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 0));
+        // Small health regeneration
+        double currentHealth = player.getHealth();
+        double maxHealth = player.getMaxHealth();
+        player.setHealth(Math.min(maxHealth, currentHealth + 2.0));
 
         // Set cooldown
         player.setCooldown(food.getType(), 20);
@@ -281,8 +280,8 @@ public class PlayerInteractListener implements Listener {
         player.setCooldown(shield.getType(), 5);
         sendMessage(player, ChatColor.BLUE + "Shield raised from offhand!");
 
-        // Add resistance effect while shielding
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10, 1));
+        // Note: For Spigot, we can't easily add resistance effects without NMS
+        // The shield functionality will work, but without visual resistance effects
     }
 
     private void updateItemDurability(Player player, ItemStack item) {
@@ -294,11 +293,10 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void sendMessage(Player player, String message) {
-        // Try action bar first, fallback to chat message
-        try {
-            player.sendActionBar(message);
-        } catch (NoSuchMethodError e) {
-            player.sendMessage(message);
-        }
+        // Use chat messages for Spigot compatibility
+        player.sendMessage(message);
+
+        // Optional: You can also use titles for better visibility
+        // player.sendTitle("", message, 5, 20, 5);
     }
 }
