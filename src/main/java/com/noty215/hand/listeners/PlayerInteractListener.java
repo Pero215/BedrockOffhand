@@ -293,7 +293,6 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void sendMessage(Player player, String message) {
-        // Use chat messages for Spigot compatibility
         player.sendMessage(message);
 
         // Optional: You can also use titles for better visibility
