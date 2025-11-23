@@ -43,15 +43,15 @@ Main Hand: ⛏️ Pickaxe / 🏹 Bow / ✂️ Shears
 
 ### **Supported Offhand Items:**
 
-| Item | Function | Activation |
-|------|----------|------------|
-| 🍖 Food | Eat while fighting | Direct/Crouch |
-| 🛡️ Shield | Block attacks | Direct/Crouch |
-| 💨 Wind Charge | Launch upward | Direct/Crouch |
-| 🛡️ Armor | Quick equip | Direct/Crouch |
-| 🧪 Potions | Drink/throw | Direct/Crouch |
-| 🔦 Torches | Place light | Crouch only |
-| 📯 Ender Pearls | Teleport | Direct/Crouch |
+| Item            | Function           | Activation    |
+|-----------------|--------------------|---------------|
+| 🍖 Food         | Eat while fighting | Direct/Crouch |
+| 🛡️ Shield      | Block attacks      | Direct/Crouch |
+| 💨 Wind Charge  | Launch upward      | Direct/Crouch |
+| 🛡️ Armor       | Quick equip        | Direct/Crouch |
+| 🧪 Potions      | Drink/throw        | Direct/Crouch |
+| 🔦 Torches      | Place light        | Crouch only   |
+| 📯 Ender Pearls | Teleport           | Direct/Crouch |
 
 ## ⚡ Simultaneous Usage Examples
 
