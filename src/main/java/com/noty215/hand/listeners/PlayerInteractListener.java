@@ -299,4 +299,8 @@ public class PlayerInteractListener implements Listener {
         // Optional: You can also use titles for better visibility
         // player.sendTitle("", message, 5, 20, 5);
     }
+    private boolean isOffhandSlot(int slot) {
+        // In Minecraft inventory, offhand slot is usually slot 40
+        return slot == 40;
+    }
 }

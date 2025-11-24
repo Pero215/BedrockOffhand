@@ -86,4 +86,8 @@ public class OffhandManager {
         bedrockPlayers.clear();
         lastOffhandUse.clear();
     }
+    public boolean isOffhandEmpty(Player player) {
+        ItemStack offhandItem = getOffhandItem(player);
+        return offhandItem == null || offhandItem.getType().isAir();
+    }
 }
