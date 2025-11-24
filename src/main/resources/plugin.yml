@@ -6,13 +6,13 @@ description: Offhand support for Bedrock players on Java servers
 author: noty215
 website: https://github.com/noty215
 
-depend: [Geyser, floodgate]
-softdepend: []
+# Use softdepend instead of depend to make it optional
+softdepend: [Geyser-Spigot, floodgate]
 
 commands:
   offhand:
     description: Manage your offhand items
-    usage: /<command> [info|clear]
+    usage: /<command> [info|clear|set]
     permission: bedrockoffhand.use
 
 permissions:
